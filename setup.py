@@ -19,6 +19,7 @@ setup(
     entry_points={
         'certbot.plugins': [
             'auth = certbot_external.external:Authenticator',
+            'install = certbot_external.external:Installer',
         ],
     },
 )

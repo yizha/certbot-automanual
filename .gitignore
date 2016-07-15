@@ -1,1 +1,5 @@
 *.pyc
+build
+dist
+certbot_external.egg-info
+certbot.log
