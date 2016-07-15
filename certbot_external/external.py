@@ -1,4 +1,4 @@
-"""automanual plugin."""
+"""Certbot external plugin."""
 import os
 import logging
 import pipes
@@ -13,6 +13,7 @@ import time
 import zope.component
 import zope.interface
 
+from urlparse import urlparse
 from acme import challenges
 
 from certbot import errors
@@ -26,7 +27,7 @@ logger = logging.getLogger(__name__)
 @zope.interface.implementer(interfaces.IAuthenticator)
 @zope.interface.provider(interfaces.IPluginFactory)
 class Authenticator(common.Plugin):
-    """automanual Authenticator.
+    """external Authenticator.
 
     This plugin requires an external executable which accepts two args
     (challenge uri and validation string). The external executable should
@@ -35,10 +36,10 @@ class Authenticator(common.Plugin):
     external web server is successfully set up.
 
     """
-    description = "Automatically configure an external web server"
+    description = "Configure web server(s) with given executable"
 
     MESSAGE_TEMPLATE = """\
-Setting up your external web server to display the following content at
+Setting up external web server to display the following content at
 {uri}:
 
 {validation}
@@ -50,9 +51,9 @@ Setting up your external web server to display the following content at
 
     @classmethod
     def add_parser_arguments(cls, add):
-        add("exec", "--automanual-auth-exec",
+        add("exec", "--external-auth-exec",
             help="External executable path")
-        add("exec-interpreter", "--automanual-auth-exec-interpreter",
+        add("exec-interpreter", "--external-auth-exec-interpreter",
             help="executable interpreter, default to '/bin/bash'.")
 
     def prepare(self):  # pylint: disable=missing-docstring,no-self-use
@@ -114,11 +115,11 @@ Setting up your external web server to display the following content at
     def _perform_single(self, achall):
         response, validation = achall.response_and_validation()
 
-        uri = achall.chall.uri(achall.domain)
+        url = achall.chall.uri(achall.domain)
         sys.stdout.write(self.MESSAGE_TEMPLATE.format(
-            validation=validation, uri=uri))
+            validation=validation, uri=url))
 
-        if self._run_exec(uri, validation) == True:
+        if self._run_exec(urlparse(url).path, validation) == True:
             if not response.simple_verify(
                     achall.chall, achall.domain,
                     achall.account_key.public_key(), self.config.http01_port):

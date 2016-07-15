@@ -1,1 +1,0 @@
-"""certbot auto-manual plugin."""

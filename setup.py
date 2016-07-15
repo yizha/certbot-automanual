@@ -8,9 +8,9 @@ install_requires = [
 ]
 
 setup(
-    name='certbot-automanual',
-    description="An automanual plugin for Let's Encrypt client (certbot)",
-    url='https://github.com/yizha/certbot-automanual',
+    name='certbot-external',
+    description="An external plugin for Let's Encrypt client (certbot)",
+    url='https://github.com/yizha/certbot-external',
     author="Yicha Ding",
     author_email='ding.rickcat@gmail.com',
     license='Apache License 2.0',
@@ -18,7 +18,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'certbot.plugins': [
-            'auth = certbot_automanual.authenticator:Authenticator',
+            'auth = certbot_external.external:Authenticator',
         ],
     },
 )
