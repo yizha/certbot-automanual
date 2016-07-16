@@ -85,6 +85,7 @@ Setting up external web server to display the following content at
             raise errors.PluginError('auth external executable not given!')
 
         _info('')
+        _info('Running external auth exec ...')
         _info('===============================')
         if exec_interpreter != None and exec_interpreter != '':
             _info('interpreter: {0}'.format(exec_interpreter))
@@ -184,6 +185,7 @@ class Installer(common.Plugin):
             raise errors.PluginError('install external executable not given!')
 
         _info('')
+        _info('Running external install exec ...')
         _info('===============================')
         if exec_interpreter != None and exec_interpreter != '':
             _info('interpreter:    {0}'.format(exec_interpreter))
